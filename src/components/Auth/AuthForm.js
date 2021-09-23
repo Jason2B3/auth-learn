@@ -3,25 +3,25 @@ import classes from "./AuthForm.module.css";
 import { createNewUser } from "./requestFunctions";
 
 const AuthForm = () => {
-  // isLogin= true (LOGIN MODE)  isLogin=false (SIGN UP MODE)
-  const [isLogin, setIsLogin] = useState(true);
-
+  const [isLogin, setIsLogin] = useState(true); // true=login  false=signup
+  // Input field values tied to refs
   const passwordInputRef = useRef();
   const emailInputRef = useRef();
 
-  // This submit handler should run regardless of what isLogin equals
+  // Sign in or Sign Up when you press the submit handler
+  // The user decides whether they want to sign in or sign up
   const submitHandler = function (event) {
     event.preventDefault();
-    // Get entered data inside input fields via refs or useState
     const enteredEmail = emailInputRef.current.value;
     const enteredPassword = passwordInputRef.current.value;
-    // We'll skip validation b/c it's not related to the Authentication topic
+    // If an account already exists, sign in
     if (isLogin) {
     }
+    // If we're signing up, create a new account
     if (!isLogin) {
-      createNewUser(enteredEmail,enteredPassword)
+      createNewUser(enteredEmail, enteredPassword);
     }
-  };
+  }; // Runs regardless of whether isLogin is T/F
 
   const switchAuthModeHandler = () => {
     setIsLogin((prevState) => !prevState);
