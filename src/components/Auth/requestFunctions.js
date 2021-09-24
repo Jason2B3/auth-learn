@@ -34,8 +34,7 @@ export const signup_login = async function (
     if (!result.ok) {
       const parsedResult = await result.json();
       console.log(`Failed ${requestType} attempt. Here's why:`, parsedResult);
-      throw new Error(parsedResult.error.message); // enter the obj we just logged
-      
+      throw new Error(parsedResult.error.message); // enter the obj we just logged 
     }
     // If operation succeeds, return the response pay,oad to the component you use this function in
     if (result.ok) {
