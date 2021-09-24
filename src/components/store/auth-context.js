@@ -10,7 +10,7 @@ export default function AuthContextProvider(props) {
   const logout = () => setIsLoggedIn(false);
   // Functions related to updating the idToken's value
   const defineAuthToken = (str) => setToken(str);
-  const expireAuthToken = () => setToken("");
+  const expireAuthToken = () => setToken(null);
   const distribution = {
     isLoggedIn,
     login, // login by setting isLoggedIn to true

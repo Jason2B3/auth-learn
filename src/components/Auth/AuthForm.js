@@ -2,7 +2,9 @@ import React, { useState, useRef } from "react";
 import classes from "./AuthForm.module.css";
 import { signup_login } from "./requestFunctions";
 import { useCustomContext } from "../store/auth-context";
+import {useHistory} from 'react-router-dom'
 const AuthForm = () => {
+  const history= useHistory()
   // auth-context.js imported values and methods:
   const { login, logout, token, defineAuthToken } = useCustomContext();
   const [isLoggingIn, setIsLoggingIn] = useState(true); // true=login  false=signup
@@ -26,8 +28,10 @@ const AuthForm = () => {
       );
       // Update the auth-context.js state values
       login(); // changes isLoggedIn state value in context file
+      if (!responsePayload) return; // guards vs crashes
       defineAuthToken(responsePayload.idToken);
       console.log("logged in! Here's my auth token:", responsePayload.idToken);
+      history.replace("/profile") //^ redirect to /profile page upon successful login
     }
     //@ If we're signing up, create a new account
     if (!isLoggingIn) {
@@ -42,6 +46,7 @@ const AuthForm = () => {
       login(); // changes isLoggedIn state value in context file
       defineAuthToken(responsePayload.idToken); // DEFINE AUTH TOKEN
       console.log("signed up! Here's my auth token:", responsePayload.idToken);
+      history.replace("/profile") //^ redirect to default page upon successful signup
     }
   }; // Runs regardless of whether isLoggingIn is T/F
 

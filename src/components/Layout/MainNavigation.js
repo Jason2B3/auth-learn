@@ -5,8 +5,10 @@ import classes from "./MainNavigation.module.css";
 const MainNavigation = () => {
   //# Render JSX conditionally on the navbar depending on our login status
   //% Signing up successfully also logs you in, since Firebase returns an identical payload anyway
-  const { isLoggedIn } = useCustomContext(); // fr/ context file
-
+  const { isLoggedIn, logout } = useCustomContext(); // fr/ context file
+  const logoutHandler= function(){
+    logout() // invoke the predefined logout function from our context file
+  }
   return (
     <header className={classes.header}>
       <Link to="/">
@@ -25,7 +27,7 @@ const MainNavigation = () => {
                 <Link to="/profile">Profile</Link>
               </li>
               <li>
-                <button>Logout</button>
+                <button onClick={logoutHandler}>Logout</button>
               </li>
             </>
           )}
