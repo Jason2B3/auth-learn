@@ -6,9 +6,9 @@ const MainNavigation = () => {
   //# Render JSX conditionally on the navbar depending on our login status
   //% Signing up successfully also logs you in, since Firebase returns an identical payload anyway
   const { isLoggedIn, logout } = useCustomContext(); // fr/ context file
-  const logoutHandler= function(){
-    logout() // invoke the predefined logout function from our context file
-  }
+  const logoutHandler = function () {
+    logout(); // invoke the predefined logout function from our context file
+  };
   return (
     <header className={classes.header}>
       <Link to="/">
@@ -22,7 +22,7 @@ const MainNavigation = () => {
             </li>
           )}
           {isLoggedIn && (
-            <> 
+            <>
               <li>
                 <Link to="/profile">Profile</Link>
               </li>

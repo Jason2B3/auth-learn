@@ -1,10 +1,10 @@
 import React, { useState, useRef } from "react";
 import classes from "./AuthForm.module.css";
-import { signup_login } from "./requestFunctions";
+import signup_login from "./requests/signup_login";
 import { useCustomContext } from "../store/auth-context";
 const AuthForm = () => {
   // auth-context.js imported values and methods:
-  const { login, logout, token, defineAuthToken } = useCustomContext();
+  const { login, logout, token, isLoggedIn } = useCustomContext();
   const [isLoggingIn, setIsLoggingIn] = useState(true); // true=login  false=signup
   // Input field values tied to refs
   const passwordInputRef = useRef();
@@ -26,9 +26,13 @@ const AuthForm = () => {
       );
       // Update the auth-context.js state values
       if (!responsePayload) return; // guards vs crashes
-      login(); // changes isLoggedIn state value in context file
-      defineAuthToken(responsePayload.idToken);
-      console.log("logged in! Here's my auth token:", responsePayload.idToken);
+      // Update context file
+      const expireTime = new Date(
+        // current time + response payload expiry time in seconds * 1000 to convert to ms
+        new Date().getTime() + Number(responsePayload.expiresIn) * 1000
+      );
+      login(responsePayload.idToken, expireTime); // changes isLoggedIn & idToken
+      console.log("logged in! Here's my payload:", responsePayload);
     }
     //@ If we're signing up, create a new account
     if (!isLoggingIn) {
@@ -39,10 +43,13 @@ const AuthForm = () => {
         "signup"
       );
       if (!responsePayload) return; // guards vs crashes
-      // Update the auth-context.js state values
-      login(); // changes isLoggedIn state value in context file
-      defineAuthToken(responsePayload.idToken); // DEFINE AUTH TOKEN
-      console.log("signed up! Here's my auth token:", responsePayload.idToken);
+      // Update context file
+      const expireTime = new Date(
+        // current time + response payload expiry time in seconds * 1000 to convert to ms
+        new Date().getTime() + Number(responsePayload.expiresIn) * 1000 //! typo
+      );
+      login(responsePayload.idToken, expireTime); // changes isLoggedIn & idToken
+      console.log("signed up! Here's my payload:", responsePayload);
     }
   }; // Runs regardless of whether isLoggingIn is T/F
 

@@ -1,10 +1,11 @@
 import classes from "./ProfileForm.module.css";
 import React, { useRef } from "react";
 import { useCustomContext } from "../store/auth-context";
-import { changePassword } from "../Auth/requestFunctions";
+import changePassword from "../Auth/requests/changePassword";
 const ProfileForm = () => {
   const inputRef = useRef();
   const { token } = useCustomContext(); // grab token from auth-context
+
   const changePasswordHandler = (e) => {
     e.preventDefault();
     // Change the password using the imported helper ƒ() from requestFunctions.js
