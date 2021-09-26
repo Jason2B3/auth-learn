@@ -27,7 +27,7 @@ export default function AuthContextProvider(props) {
     localStorage.removeItem("expirationTime");
     //$ End the countdown if we manually logout before the countdown finishes
     if (logoutTimer) clearTimeout(logoutTimer); // points to setTimeout in login()
-  }, []); // don't need this function to ever change or get redefined
+  }, []); // nothing except
 
   const login = (idToken, expirationTime) => {
     // Update state variables and the localStorage KVP's to reflect us logging in
@@ -36,19 +36,20 @@ export default function AuthContextProvider(props) {
     //# Save Unix time when token expires
     localStorage.setItem("expirationTime", expirationTime);
 
-    //$ Auto logout the user after expirationTime has passed
+    //$ Right after we sign in, activate the countdon until your auto-logout
     const timeLeft = calcTimeLeft(expirationTime);
     logoutTimer = setTimeout(logout, timeLeft);
     // logoutTimer = setTimeout(logout, 5000); can choose to log user out earlier
   }; // expirationTime must be a Unix timestamp set X amount of time in the future (ms)
   // must set a new timer when we reload the page and need to stay logged in
 
+  //$ On reload, activate the countdown until your auto-logout (assuming you have a token in storage)
   useEffect(() => {
     if (tokenData) {
       console.log(tokenData.timeLeft);
       logoutTimer = setTimeout(logout, tokenData.timeLeft);
     }
-  }, [tokenData, logout]);
+  }, [tokenData, logout]); // tokenData gets redefined on reload (reference type)
 
   const distribution = {
     token, // auth token value
